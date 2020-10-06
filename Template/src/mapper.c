@@ -78,6 +78,7 @@ void freeInterDS(intermediateDS *root) {
 
 // emit the <key, value> into intermediate DS 
 void emit(char *key, char *value) {
+	//printf("Key is %s , Value is %s\n", key, value);
 	insertPairToInterDS(llist, key, value);
 }
 
@@ -91,11 +92,9 @@ void map(char *chunkData){
 	int i = 0;
 	char *buffer;
 	while ((buffer = getWord(chunkData, &i)) != NULL){
-		
-		for()
-		//your code
+		//printf("Word found: %s\n",buffer);
+		emit(&buffer, "1");
 	}
-	
 }
 
 void createFile(char *word, char *file){
