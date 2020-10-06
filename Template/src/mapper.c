@@ -1,5 +1,6 @@
 #include "mapper.h"
 
+intermediateDS lList;
 // combined value list corresponding to a word <1,1,1,1....>
 valueList *createNewValueListNode(char *value){
 	valueList *newNode = (valueList *)malloc (sizeof(valueList));
@@ -77,7 +78,7 @@ void freeInterDS(intermediateDS *root) {
 
 // emit the <key, value> into intermediate DS 
 void emit(char *key, char *value) {
-
+	insertPairToInterDS(llist, key, value);
 }
 
 // map function
@@ -91,15 +92,40 @@ void map(char *chunkData){
 	char *buffer;
 	while ((buffer = getWord(chunkData, &i)) != NULL){
 		
+		for()
 		//your code
 	}
 	
 }
 
+void createFile(char *word, char *file){
+	strcpy(file, mapOutDir);
+	strcpy(file, "/");
+	strcpy(file, word);
+	strcpy(file, ".txt");
+}
+
+void writeCount(valueList *root, FILE *dest){
+	char count = '1';
+	while (countList != NULL){
+		root = root -> next;
+		fputc(count, dest)
+	}
+}
+
 // write intermediate data to separate word.txt files
 // Each file will have only one line : word 1 1 1 1 1 ...
 void writeIntermediateDS() {
-	
+	while (lList != NULL){
+		char word[] = lList -> key; //not sure about string size
+		char file[];
+		createFile(word, file);
+	    FILE* dest = fopen (file, "w");
+		valueList root = lList -> valueList;
+		writeCount(*root, dest);
+		lList = lList -> next;
+	}
+	freeInterDS(lList);
 }
 
 int main(int argc, char *argv[]) {
@@ -126,7 +152,7 @@ int main(int argc, char *argv[]) {
 		memset(chunkData, '\0', chunkSize + 1);
 
 		char *retChunk = getChunkData(mapperID);
-		if(retChunk == NULL) {
+		if(retChunk == NULL) {git a
 			break;
 		}
 
