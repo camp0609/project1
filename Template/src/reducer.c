@@ -45,7 +45,7 @@ void freeFinalDS(finalKeyValueDS *root) {
 void reduce(char *key) {
   FILE *f;
   f = fopen(key, "r");
-  if(f == -1) {
+  if(errno == -1) {
     printf("open %s wrongly", key);
     return;
   }
