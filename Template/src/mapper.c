@@ -163,7 +163,6 @@ int main(int argc, char *argv[]) {
 
 	// ###### DO NOT REMOVE ######
 	writeIntermediateDS();
-	//freeInterDS(llist);
 		
 	return 0;
 }
