@@ -45,7 +45,7 @@ void freeFinalDS(finalKeyValueDS *root) {
 void reduce(char *key) {
   FILE *f;
   f = fopen(key, "r");
-  if(f == "EOF") {
+  if(f == -1) {
     printf("open %s wrongly", key);
     return;
   }
@@ -63,7 +63,7 @@ void reduce(char *key) {
 // write the contents of the final intermediate structure
 // to output/ReduceOut/Reduce_reducerID.txt
 void writeFinalDS(int reducerID){
-  File * fp;
+  FILE * fp;
   fp = fopen("output/ReduceOut/Reduce_reducerID.txt", "w");
   finalKeyValueDS * temp = root;
   while(temp!=NULL) {
