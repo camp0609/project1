@@ -1,5 +1,6 @@
 #include "mapper.h"
 
+intermediateDS *lList = NULL;
 // combined value list corresponding to a word <1,1,1,1....>
 valueList *createNewValueListNode(char *value){
 	valueList *newNode = (valueList *)malloc (sizeof(valueList));
@@ -77,7 +78,8 @@ void freeInterDS(intermediateDS *root) {
 
 // emit the <key, value> into intermediate DS 
 void emit(char *key, char *value) {
-
+	//printf("Key is %s , Value is %s\n", key, value);
+	insertPairToInterDS(lList, key, value);
 }
 
 // map function
@@ -85,12 +87,45 @@ void map(char *chunkData){
 	// you can use getWord to retrieve words from the 
 	// chunkData one by one. Example usage in utils.h
 	
+	// getWord usage - retrieves words from the chunk passed until it is fully traversed
+	// given a chunk of data chunkData, the call to getWord should look as below:
+	int i = 0;
+	char *buffer;
+	while ((buffer = getWord(chunkData, &i)) != NULL){
+		//printf("Word found: %s\n",buffer);
+		emit(buffer, "1"); //If it doesn't work do &buffer instead
+	}
+}
+
+void createFile(char *word, char *file){
+	strcpy(file, mapOutDir);
+	strcpy(file, "/");
+	strcpy(file, word);
+	strcpy(file, ".txt");
+}
+
+void writeCount(valueList *root, FILE *dest){
+	char count = '1';
+	while (root != NULL){
+		root = root -> next;
+		fputc(count, dest);
+	}
+	fclose (dest);
 }
 
 // write intermediate data to separate word.txt files
 // Each file will have only one line : word 1 1 1 1 1 ...
 void writeIntermediateDS() {
-	
+	while (lList != NULL){
+		//char word[100] = lList -> key; 
+		char file[100];
+		createFile(lList -> key, file);
+	    FILE* dest = fopen (file, "w");
+		valueList *root = lList -> value;
+		writeCount(root, dest);
+		lList = lList -> next;
+	}
+	freeInterDS(lList);
 }
 
 int main(int argc, char *argv[]) {
@@ -129,6 +164,6 @@ int main(int argc, char *argv[]) {
 
 	// ###### DO NOT REMOVE ######
 	writeIntermediateDS();
-
+		
 	return 0;
 }
