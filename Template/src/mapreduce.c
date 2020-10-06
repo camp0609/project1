@@ -130,7 +130,7 @@ int main(int argc, char *argv[]) {
 	pid_t child_pids[nMappers];
 	for (i = 0; i<nMappers;i++) {
 		if((child_pids[i]=fork())==0) {
-			execvp("/mapper");
+			execl("/src/mapper", "mapper",(char*)0);
 		}
 	}
 	// To do
@@ -153,15 +153,15 @@ int main(int argc, char *argv[]) {
 	// To do
 	// spawn reducer processes and run 'reducer' executable using exec
 	int j;
-	pid_t child_pids[nReducers];
+	pid_t child_pids2[nReducers];
 	for (j = 0; j<nReducers;j++) {
-		if (child_pids[j]=fork())==0) {
-			execvp("/reducer");
+		if ((child_pids2[j]=fork())==0) {
+			execl("/src/reducer", "reducer",(char*)0);
 		}
 	}
 	// To do
 	// wait for all children to complete execution
-	for (j=0; j<nMappers; j++) {
+	for (j=0; j<nReducers; j++) {
 		wait(NULL);
 	}
 	return 0;
