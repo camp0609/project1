@@ -93,7 +93,7 @@ void map(char *chunkData){
 	char *buffer;
 	while ((buffer = getWord(chunkData, &i)) != NULL){
 		//printf("Word found: %s\n",buffer);
-		emit(&buffer, "1");
+		emit(buffer, "1"); //If it doesn't work do &buffer instead
 	}
 }
 
