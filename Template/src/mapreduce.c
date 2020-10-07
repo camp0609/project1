@@ -128,9 +128,11 @@ int main(int argc, char *argv[]) {
 	// spawn mappers processes and run 'mapper' executable using exec
 	int i;
 	pid_t child_pids[nMappers];
+	char * idM[nMappers];
 	for (i = 0; i<nMappers;i++) {
 		if((child_pids[i]=fork())==0) {
-			execl("/src/mapper", "mapper",(char*)0);
+			sprintf(idM[i], "%d", i);
+			execl("/src/mapper", "mapper", idM[i], (char*)0);
 		}
 	}
 	// To do
@@ -154,9 +156,11 @@ int main(int argc, char *argv[]) {
 	// spawn reducer processes and run 'reducer' executable using exec
 	int j;
 	pid_t child_pids2[nReducers];
+	char * idR[nReducers];
 	for (j = 0; j<nReducers;j++) {
 		if ((child_pids2[j]=fork())==0) {
-			execl("/src/reducer", "reducer",(char*)0);
+			sprintf(idR[j], "%d", j);
+			execl("/src/reducer", "reducer", idR[j], (char*)0);
 		}
 	}
 	// To do
