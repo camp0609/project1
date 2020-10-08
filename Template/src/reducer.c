@@ -63,8 +63,14 @@ void reduce(char *key) {
 // write the contents of the final intermediate structure
 // to output/ReduceOut/Reduce_reducerID.txt
 void writeFinalDS(int reducerID){
+  char *str1 = "output/ReduceOut/Reduce_";
+  char *str2 = ".txt";
+  char reduceID[33];
+  sprintf(reduceID, "%d", reducerID);
+  char *reducestring = strcat(str1, strcat(reduceID, str2));
+  //printf("%s", reducestring);
   FILE * fp;
-  fp = fopen("output/ReduceOut/Reduce_reducerID.txt", "w");
+  fp = fopen(reducestring, "w");
   finalKeyValueDS * temp = root;
   while(temp!=NULL) {
     fprintf(fp, "%s %d\n", temp->key, temp->value);
