@@ -97,35 +97,26 @@ void map(char *chunkData){
 	}
 }
 
-void createFile(char *word, char *file){
-	strcpy(file, mapOutDir);
-	strcpy(file, "/");
-	strcpy(file, word);
-	strcpy(file, ".txt");
-}
-
-void writeCount(valueList *root, FILE *dest){
-	char count = '1';
-	while (root != NULL){
-		root = root -> next;
-		fputc(count, dest);
-	}
-	fclose (dest);
-}
-
 // write intermediate data to separate word.txt files
 // Each file will have only one line : word 1 1 1 1 1 ...
 void writeIntermediateDS() {
-	while (lList != NULL){
-		//char word[100] = lList -> key; 
-		char file[100];
-		createFile(lList -> key, file);
-	    FILE* dest = fopen (file, "w");
-		valueList *root = lList -> value;
-		writeCount(root, dest);
-		lList = lList -> next;
+	intermediateDS *temp = lList;
+	while (temp != NULL){
+		char word[100];
+		strcpy(word, temp -> key);
+		char *str = ".txt";
+		char *mapstring = strcat(word, str);
+		FILE* dest = fopen (mapstring, "w");
+		printf("File created %s",mapstring);
+		valueList *valuetemp = temp -> value;
+		while (valuetemp != NULL){
+			fwrite("1", 1, 1, dest);
+			valuetemp = valuetemp -> next;
+			}
+		temp = temp -> next;
+		fclose(dest);
 	}
-	freeInterDS(lList);
+	freeInterDS(temp);
 }
 
 int main(int argc, char *argv[]) {
@@ -139,11 +130,11 @@ int main(int argc, char *argv[]) {
 	mapperID = strtol(argv[1], NULL, 10);
 
 	// ###### DO NOT REMOVE ######
-	// create folder specifically for this mapper in output/MapOut
+	// create folder specifically for this mapper in /MapOut
 	// mapOutDir has the path to the folder where the outputs of 
 	// this mapper should be stored
 	mapOutDir = createMapDir(mapperID);
-
+	
 	// ###### DO NOT REMOVE ######
 	while(1) {
 		// create an array of chunkSize=1024B and intialize all 
