@@ -100,23 +100,22 @@ void map(char *chunkData){
 // write intermediate data to separate word.txt files
 // Each file will have only one line : word 1 1 1 1 1 ...
 void writeIntermediateDS() {
-	intermediateDS *temp = lList;
-	while (temp != NULL){
+	while (lList != NULL){
 		char word[100];
-		strcpy(word, temp -> key);
+		strcpy(word, lList -> key);
 		char *str = ".txt";
 		char *mapstring = strcat(word, str);
 		FILE* dest = fopen (mapstring, "w");
 		printf("File created %s",mapstring);
-		valueList *valuetemp = temp -> value;
+		valueList *valuetemp = lList -> value;
 		while (valuetemp != NULL){
 			fwrite("1", 1, 1, dest);
 			valuetemp = valuetemp -> next;
 			}
-		temp = temp -> next;
+		lList = lList -> next;
 		fclose(dest);
 	}
-	freeInterDS(temp);
+	freeInterDS(lList);
 }
 
 int main(int argc, char *argv[]) {
