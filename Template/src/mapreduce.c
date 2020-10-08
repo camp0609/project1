@@ -128,11 +128,12 @@ int main(int argc, char *argv[]) {
 	// spawn mappers processes and run 'mapper' executable using exec
 	int i;
 	pid_t child_pids[nMappers];
-	char * idM[nMappers];
+	char* idM = (char*)malloc(sizeof(char)*5);
 	for (i = 0; i<nMappers;i++) {
-		if((child_pids[i]=fork())==0) {
-			sprintf(idM[i], "%d", i);
-			execl("/src/mapper", "mapper", idM[i], (char*)0);
+		child_pids[i] = fork();
+		if(child_pids[i]==0) {
+			sprintf(idM, "%d", i + 1);
+			execl("./mapper", "./mapper", idM, (char*)NULL);
 		}
 	}
 	// To do
