@@ -85,10 +85,7 @@ void writeFinalDS(int reducerID){
   }
   finalKeyValueDS *temp = root;
   while(temp!=NULL) {
-    int err = fprintf(fp, "%s %d\n", temp->key, temp->value);
-    if(err != 0){
-       printf("Failed to write to file\n");
-    }
+    fprintf(fp, "%s %d\n", temp->key, temp->value);
     temp = temp->next;
   }
   freeFinalDS(root);
