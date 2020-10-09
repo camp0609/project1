@@ -63,6 +63,8 @@ void reduce(char *key) {
  }
   ch = fgetc(f);
   }
+  if(ferror(f)!=0)
+     printf("failed to read from the file.\n");
   root = insertNewKeyValue(root, word, count);
   fclose(f);
 }
