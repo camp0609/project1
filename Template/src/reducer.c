@@ -46,16 +46,21 @@ void reduce(char *key) {
   FILE *f;
   f = fopen(key, "r");
   if(errno == -1) {
-		printf("failed to open file\n");   
+		printf("failed to open file\n");
 		printf("open %s wrongly", key);
     return;
   }
   char word[50];
   fscanf(f, "%s", word);
   int count = 0;
-  int occurance = 1;
-  while(fscanf(f,"%d", &occurance)!=0) {
-    count ++;
+	char ch;
+	ch = fgetc(f);
+  while(ch != EOF) {
+		if(ch != ' '){
+			count ++;
+		}
+    //count ++;
+		ch = fgetc(f);
   }
   root = insertNewKeyValue(root, word, count);
   fclose(f);
@@ -64,14 +69,11 @@ void reduce(char *key) {
 // write the contents of the final intermediate structure
 // to output/ReduceOut/Reduce_reducerID.txt
 void writeFinalDS(int reducerID){
-	printf("testing\n");
   char str1[100] = "output/ReduceOut/Reduce_";
   char str2[] = ".txt";
   char reduceID[33];
   sprintf(reduceID, "%d", reducerID);
-	//printf("%s\n", str1);
   char *reducestring = strcat(str1, strcat(reduceID, str2));
-  printf("hello\n");
   FILE *fp;
   fp = fopen(reducestring, "w");
   finalKeyValueDS *temp = root;
