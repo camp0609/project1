@@ -108,14 +108,14 @@ void writeCount(valueList *root, FILE *dest, char *word){
 	int err;
 	err = fprintf(dest, "%s", word);
 	if(err != 0){
-		printf("Failed to write to file for %s", word)
+		printf("Failed to write to file for %s", word);
 	}
 	char count[] = " 1";
 	while (root != NULL){
 		root = root -> next;
 		err = fprintf(dest, "%s", count);
 		if(err != 0){
-			printf("Failed to write to file for %s", word)
+			printf("Failed to write to file for %s", word);
 		}
 	}
 	fclose (dest);
