@@ -87,7 +87,7 @@ void writeFinalDS(int reducerID){
   while(temp!=NULL) {
     int err = fprintf(fp, "%s %d\n", temp->key, temp->value);
     if(err != 0){
-       printf("Failed to write to file");
+       printf("Failed to write to file\n");
     }
     temp = temp->next;
   }
