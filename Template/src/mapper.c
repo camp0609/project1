@@ -96,20 +96,27 @@ void map(char *chunkData){
 		emit(buffer, "1"); //If it doesn't work do &buffer instead
 	}
 }
-
+//create file name/path for fopen
 void createFile(char *word, char *file){
 	strcpy(file, mapOutDir);
 	strcat(file, "/");
 	strcat(file, word);
 	strcat(file, ".txt");
 }
-
+//write word and count to file
 void writeCount(valueList *root, FILE *dest, char *word){
-	fprintf(dest, "%s", word);
+	int err;
+	err = fprintf(dest, "%s", word);
+	if(err != 0){
+		printf("Failed to write to file for %s", word)
+	}
 	char count[] = " 1";
 	while (root != NULL){
 		root = root -> next;
-		fprintf(dest, "%s", count);
+		err = fprintf(dest, "%s", count);
+		if(err != 0){
+			printf("Failed to write to file for %s", word)
+		}
 	}
 	fclose (dest);
 }
@@ -123,6 +130,10 @@ void writeIntermediateDS() {
 		char file[100];
 		createFile(lList -> key, file);
 	  FILE* dest = fopen (file, "w");
+		if(dest == NULL){
+			perror("Failed: ");
+			return 1;
+		}
 		valueList *root = lList -> value;
 		writeCount(root, dest, lList -> key);
 		lList = lList -> next;
