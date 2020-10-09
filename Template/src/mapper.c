@@ -1,6 +1,6 @@
 #include "mapper.h"
 
-intermediateDS *lList = NULL;
+intermediateDS *lList;
 // combined value list corresponding to a word <1,1,1,1....>
 valueList *createNewValueListNode(char *value){
 	valueList *newNode = (valueList *)malloc (sizeof(valueList));
@@ -53,7 +53,7 @@ intermediateDS *insertPairToInterDS(intermediateDS *root, char *word, char *coun
 			return root;
 		}
 		tempNode = tempNode -> next;
-		
+
 	}
 	if(strcmp(tempNode -> key, word) == 0){
 		tempNode -> value = insertNewValueToList(tempNode -> value, count);
@@ -76,17 +76,17 @@ void freeInterDS(intermediateDS *root) {
 	}
 }
 
-// emit the <key, value> into intermediate DS 
+// emit the <key, value> into intermediate DS
 void emit(char *key, char *value) {
 	//printf("Key is %s , Value is %s\n", key, value);
-	insertPairToInterDS(lList, key, value);
+	lList = insertPairToInterDS(lList, key, value);
 }
 
 // map function
 void map(char *chunkData){
-	// you can use getWord to retrieve words from the 
+	// you can use getWord to retrieve words from the
 	// chunkData one by one. Example usage in utils.h
-	
+
 	// getWord usage - retrieves words from the chunk passed until it is fully traversed
 	// given a chunk of data chunkData, the call to getWord should look as below:
 	int i = 0;
@@ -97,29 +97,41 @@ void map(char *chunkData){
 	}
 }
 
-// write intermediate data to separate word.txt files
-// Each file will have only one line : word 1 1 1 1 1 ...
+void createFile(char *word, char *file){
+	strcpy(file, mapOutDir);
+	strcat(file, "/");
+	strcat(file, word);
+	strcat(file, ".txt");
+}
+
+void writeCount(valueList *root, FILE *dest, char *word){
+	fwrite(word, 1, sizeof(word), dest);
+	char count[] = " 1";
+	while (root != NULL){
+		root = root -> next;
+		fwrite(count, 1, sizeof(count), dest);
+	}
+	fclose (dest);
+}
+
+//write intermediate data to separate word.txt files
+//Each file will have only one line : word 1 1 1 1 1 ...
 void writeIntermediateDS() {
 	while (lList != NULL){
-		char word[100];
-		strcpy(word, lList -> key);
-		char *str = ".txt";
-		char *mapstring = strcat(word, str);
-		FILE* dest = fopen (mapstring, "w");
-		printf("File created %s",mapstring);
-		valueList *valuetemp = lList -> value;
-		while (valuetemp != NULL){
-			fwrite("1", 1, 1, dest);
-			valuetemp = valuetemp -> next;
-			}
+		//char word[20];
+		//strcpy(word, lList -> key);
+		char file[100];
+		createFile(lList -> key, file);
+	  FILE* dest = fopen (file, "w");
+		valueList *root = lList -> value;
+		writeCount(root, dest, lList -> key);
 		lList = lList -> next;
-		fclose(dest);
 	}
 	freeInterDS(lList);
 }
 
 int main(int argc, char *argv[]) {
-	
+
 	if (argc < 2) {
 		printf("Less number of arguments.\n");
 		printf("./mapper mapperID\n");
@@ -127,16 +139,17 @@ int main(int argc, char *argv[]) {
 	}
 	// ###### DO NOT REMOVE ######
 	mapperID = strtol(argv[1], NULL, 10);
+	printf("%c", mapperID);
 
 	// ###### DO NOT REMOVE ######
-	// create folder specifically for this mapper in /MapOut
-	// mapOutDir has the path to the folder where the outputs of 
+	// create folder specifically for this mapper in output/MapOut
+	// mapOutDir has the path to the folder where the outputs of
 	// this mapper should be stored
 	mapOutDir = createMapDir(mapperID);
-	
+
 	// ###### DO NOT REMOVE ######
 	while(1) {
-		// create an array of chunkSize=1024B and intialize all 
+		// create an array of chunkSize=1024B and intialize all
 		// elements with '\0'
 		char chunkData[chunkSize + 1]; // +1 for '\0'
 		memset(chunkData, '\0', chunkSize + 1);
@@ -154,6 +167,6 @@ int main(int argc, char *argv[]) {
 
 	// ###### DO NOT REMOVE ######
 	writeIntermediateDS();
-		
+
 	return 0;
 }
