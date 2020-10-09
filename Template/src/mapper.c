@@ -105,11 +105,11 @@ void createFile(char *word, char *file){
 }
 
 void writeCount(valueList *root, FILE *dest, char *word){
-	fwrite(word, 1, sizeof(word), dest);
+	fprintf(dest, "%s", word);
 	char count[] = " 1";
 	while (root != NULL){
 		root = root -> next;
-		fwrite(count, 1, sizeof(count), dest);
+		fprintf(dest, "%s", count);
 	}
 	fclose (dest);
 }
