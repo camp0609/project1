@@ -105,18 +105,11 @@ void createFile(char *word, char *file){
 }
 //write word and count to file
 void writeCount(valueList *root, FILE *dest, char *word){
-	int err;
-	err = fprintf(dest, "%s", word);
-	if(err != 0){
-		printf("Failed to write to file for %s", word);
-	}
+	fprintf(dest, "%s", word);
 	char count[] = " 1";
 	while (root != NULL){
 		root = root -> next;
-		err = fprintf(dest, "%s", count);
-		if(err != 0){
-			printf("Failed to write to file for %s", word);
-		}
+		fprintf(dest, "%s", count);
 	}
 	fclose (dest);
 }
@@ -132,7 +125,6 @@ void writeIntermediateDS() {
 	  FILE* dest = fopen (file, "w");
 		if(dest == NULL){
 			perror("Failed: ");
-			return 1;
 		}
 		valueList *root = lList -> value;
 		writeCount(root, dest, lList -> key);
