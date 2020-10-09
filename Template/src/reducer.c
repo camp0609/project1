@@ -1,5 +1,8 @@
 #include "reducer.h"
+
+//the root fot the word tree
 finalKeyValueDS *root = NULL;
+
 // create a key value node
 finalKeyValueDS *createFinalKeyValueNode(char *word, int count){
 	finalKeyValueDS *newNode = (finalKeyValueDS *)malloc (sizeof(finalKeyValueDS));
@@ -46,21 +49,19 @@ void reduce(char *key) {
   FILE *f;
   f = fopen(key, "r");
   if(errno == -1) {
-		printf("failed to open file\n");
-		printf("open %s wrongly", key);
+    printf("failed to open file\n");
     return;
   }
   char word[50];
   fscanf(f, "%s", word);
   int count = 0;
-	char ch;
-	ch = fgetc(f);
+  char ch;
+  ch = fgetc(f);
   while(ch != EOF) {
-		if(ch != ' '){
-			count ++;
-		}
-    //count ++;
-		ch = fgetc(f);
+   if(ch != ' '){
+   count ++;
+ }
+  ch = fgetc(f);
   }
   root = insertNewKeyValue(root, word, count);
   fclose(f);
@@ -76,6 +77,10 @@ void writeFinalDS(int reducerID){
   char *reducestring = strcat(str1, strcat(reduceID, str2));
   FILE *fp;
   fp = fopen(reducestring, "w");
+  if(errno == -1) {
+    printf("failed to create file\n");
+    return;
+  }
   finalKeyValueDS *temp = root;
   while(temp!=NULL) {
     fprintf(fp, "%s %d\n", temp->key, temp->value);
